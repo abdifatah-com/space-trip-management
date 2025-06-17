@@ -16,6 +16,14 @@ A PHP &amp; MySQL web app for managing astronaut trips, spacecraft assignments, 
 ## License
 MIT License
 
+
+## preview 
+![Screenshot 2025-06-17 120505](https://github.com/user-attachments/assets/d0d5b264-e167-4694-9ffd-a82beb81da30)
+![Screenshot 2025-06-17 120449](https://github.com/user-attachments/assets/68f00e4f-fee3-4aa7-a224-56df33298791)
+![Screenshot 2025-06-17 120552](https://github.com/user-attachments/assets/c557e7bc-b6ed-4f7f-8969-53a608498003)
+![Screenshot 2025-06-17 120527](https://github.com/user-attachments/assets/811eb73e-98c7-4162-8517-5ebd9ed1a732)
+
+
 ---
 
 ## Contact
