@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🛰️ Astronaut Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    #registerMessage {
+      margin-top: 12px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-box">
+      <h2>🧑‍🚀 Astronaut Registration</h2>
+
+      <!-- Updated Form -->
+      <form id="registerForm" autocomplete="off">
+        <input type="text" placeholder="👤 Full Name" name="fullname" required />
+        <input type="email" placeholder="📧 Email Address" name="email" required />
+        <input type="tel" placeholder="📱 Phone Number" name="phone" pattern="[0-9]{8,15}" required />
+        <input type="text" placeholder="🛂 Passport Number" name="passport_number" required />
+        <input type="text" placeholder="🆔 Choose a Username" name="username" required />
+        <input type="password" placeholder="🔒 Create Password" name="password" required />
+
+        <label style="display: flex; align-items: center; margin-top: 15px;">
+          <input type="checkbox" name="terms" required style="margin-right: 8px;" />
+          I agree to the <a href="#">terms & policy</a>
+        </label>
+
+        <label style="display: flex; align-items: center; margin-top: 10px;">
+          <input type="checkbox" name="not_robot" required style="margin-right: 8px;" />
+          I’m not a robot 🤖
+        </label>
+
+        <button type="submit">Register ✅</button>
+        <p id="registerMessage"></p>
+        <p>Already have an account? <a href="login.php">Log in</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- AJAX Script -->
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      fetch("register_process.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        const msg = document.getElementById("registerMessage");
+        msg.textContent = data;
+        msg.style.color = data.includes("successfully") ? "lightgreen" : "red";
+
+        if (data.includes("successfully")) {
+          form.reset();
+        }
+      })
+      .catch(error => {
+        document.getElementById("registerMessage").textContent = "⚠️ Something went wrong.";
+      });
+    });
+  </script>
+</body>
+</html>

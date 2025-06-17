@@ -1,0 +1,254 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: url('space101.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 30px;
+  width: 90%;
+  max-width: 1000px;
+  color: #ffffff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.form-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 2rem;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+input {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1rem;
+  width: 48%;
+  min-width: 250px;
+}
+
+input::placeholder {
+  color: #cfdfff;
+}
+
+input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 0.9rem;
+  gap: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #00d2ff;
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background: #00a8cc;
+}
+
+p {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  width: 100%;
+  text-align: center;
+}
+
+a {
+  color: #82e9ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Dadhboard styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: url('space101.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 40px 40px 50px 40px; /* a bit more padding */
+  width: 95%;              /* wider container */
+  max-width: 1200px;       /* bigger max width */
+  color: #ffffff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  margin: 20px auto;
+}
+
+.button-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;               /* space between buttons */
+  justify-content: center; /* center buttons horizontally */
+}
+
+.main-buttons {
+  margin-bottom: 40px; /* add space below main buttons */
+}
+
+
+.dashboard-button {
+  flex: 1 1 180px;         /* buttons grow and shrink, min width 180px */
+  max-width: 220px;
+  padding: 18px 0;
+  border-radius: 12px;
+  background: #00d2ff;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-align: center;
+  border: none;
+}
+
+.dashboard-button:hover {
+  background: #00a8cc;
+}
+
+ 
+/* Log out BTN */
+.logout-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.logout-button {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 16px 30px;
+  border-radius: 12px;
+  background: #ff4e4e;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.logout-button:hover {
+  background: #cc3b3b;
+}
+
+
+/* 404 styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: url('../css/space101.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.error-container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.error-container img {
+  width: 300px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+
+.error-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.error-container p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 12px 20px;
+  background: #00d2ff;
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: #00a8cc;
+}
