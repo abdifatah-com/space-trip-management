@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatzone Test Client</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { margin-bottom: 10px; padding: 8px; }
+        #messages { list-style-type: none; padding: 0; border: 1px solid #ccc; height: 300px; overflow-y: scroll; margin-bottom: 10px;}
+        #messages li { padding: 8px; border-bottom: 1px solid #eee; }
+        .controls, .auth-controls { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; }
+        h2, h3 { margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>Chatzone Test Client</h1>
+
+    <div class="auth-controls">
+        <h3>Authentication</h3>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="registerUser()">Register</button>
+        <button onclick="loginUser()">Login</button>
+        <p>Auth Token: <span id="authToken"></span></p>
+        <p>My User ID: <span id="myUserId"></span></p>
+    </div>
+
+    <div class="controls">
+        <h3>Chat</h3>
+        <input type="text" id="receiverId" placeholder="Receiver User ID">
+        <input type="text" id="message" placeholder="Enter message">
+        <button onclick="sendMessage()">Send Message</button>
+        <button onclick="fetchMessages()">Fetch Messages with Receiver</button>
+    </div>
+
+    <h3>Messages:</h3>
+    <ul id="messages"></ul>
+
+    <script>
+        let socket;
+        let token = '';
+        let myUserId = '';
+
+        async function registerUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                alert(data.msg || JSON.stringify(data));
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed.');
+            }
+        }
+
+        async function loginUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                if (data.token) {
+                    token = data.token;
+                    document.getElementById('authToken').textContent = token;
+                    // Decode token to get user ID (simplified, in real app get from payload)
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    myUserId = payload.user.id;
+                    document.getElementById('myUserId').textContent = myUserId;
+                    alert('Login successful!');
+                    initializeSocket();
+                } else {
+                    alert('Login failed: ' + (data.msg || JSON.stringify(data)));
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed.');
+            }
+        }
+
+        function initializeSocket() {
+            if (socket) {
+                socket.disconnect();
+            }
+            // Connect to the server, Socket.IO client will be served by the server
+            socket = io();
+
+            socket.on('connect', () => {
+                console.log('Connected to Socket.IO server with ID:', socket.id);
+                // Join a room specific to this user
+                if (myUserId) {
+                    socket.emit('join_room', myUserId);
+                }
+            });
+
+            socket.on('new_message', (msg) => {
+                const messagesList = document.getElementById('messages');
+                const item = document.createElement('li');
+                item.textContent = `[${new Date(msg.created_at).toLocaleTimeString()}] User ${msg.sender_id}: ${msg.message}`;
+                messagesList.appendChild(item);
+                messagesList.scrollTop = messagesList.scrollHeight;
+            });
+
+            socket.on('disconnect', () => {
+                console.log('Disconnected from Socket.IO server');
+            });
+        }
+
+        async function sendMessage() {
+            if (!token) {
+                alert('Please login first.');
+                return;
+            }
+            const receiver_id = document.getElementById('receiverId').value;
+            const message = document.getElementById('message').value;
+            if (!receiver_id || !message) {
+                alert('Please enter Receiver User ID and message.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/messages/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': token
+                    },
+                    body: JSON.stringify({ receiver_id, message })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    // Message will be added to the list via socket 'new_message' event
+                    console.log('Send message response:', data);
+                    document.getElementById('message').value = ''; // Clear input
+                } else {
+                    alert('Send message failed: ' + (data.msg || JSON.stringify(data)));
+                }
+            } catch (error) {
+                console.error('Send message error:', error);
+                alert('Send message failed.');
+            }
+        }
+
+        async function fetchMessages() {
+            if (!token) {
+                alert('Please login first.');
+                return;
+            }
+            const otherUserId = document.getElementById('receiverId').value;
+            if (!otherUserId) {
+                alert('Please enter the other User ID to fetch messages.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/messages/get-messages/${otherUserId}`, {
+                    method: 'GET',
+                    headers: { 'x-auth-token': token }
+                });
+                const messages = await response.json();
+                const messagesList = document.getElementById('messages');
+                messagesList.innerHTML = ''; // Clear existing messages
+                if (response.ok) {
+                    messages.forEach(msg => {
+                        const item = document.createElement('li');
+                        item.textContent = `[${new Date(msg.created_at).toLocaleTimeString()}] User ${msg.sender_id}: ${msg.message}`;
+                        messagesList.appendChild(item);
+                    });
+                    messagesList.scrollTop = messagesList.scrollHeight;
+                } else {
+                     alert('Fetch messages failed: ' + (messages.msg || JSON.stringify(messages)));
+                }
+            } catch (error) {
+                console.error('Fetch messages error:', error);
+                alert('Fetch messages failed.');
+            }
+        }
+
+        // Try to initialize socket if a token is already in localStorage (e.g. after refresh)
+        // For this simple client, we rely on manual login each time.
+        // In a real app, you'd store and retrieve the token and user ID from localStorage.
+    </script>
+</body>
+</html>
